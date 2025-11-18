@@ -7,19 +7,15 @@ const inputName = document.getElementById('name');
 const inputRole = document.getElementById('role');
 const inputImage = document.getElementById('url-input');
 // console.log(inputImage);
-
 let workers = [];
 
 function renderUnassignedList() {
     const cardsContainer = document.getElementById("cards-container");
-    // cardsContainer.innerHTML = "";
-    if (!cardsContainer) return;
+    cardsContainer.innerHTML = "";
+    // if (!cardsContainer) return;
     cardsContainer.innerHTML = workers.map((worker, index) => creatCardHtmlUnassignedWorkers(worker, index)).join("");
-
     // console.log(cardsContainer);
-
 }
-
 
 const saveWorkersData = () => {
     localStorage.setItem("workers", JSON.stringify(workers))
@@ -41,7 +37,6 @@ const louadDatavUnassignedWorkers = async () => {
     renderUnassignedList();
 }
 
-
 function creatCardHtmlUnassignedWorkers(worker, index) {
     return `
         <div class="user-card" data-id="${worker.id}">
@@ -55,7 +50,6 @@ function creatCardHtmlUnassignedWorkers(worker, index) {
         </div>
     `;
 }
-
 
 function addImageProfil() {
     urlInput.onchange = function () {

@@ -1,0 +1,64 @@
+[
+    {
+        "name": "Salle de conférence",
+        " capacité": 10,
+        "isRequired": false,
+        "members": [],
+        "rolesAccepte": [
+            "Manager",
+            "Nettoyage"
+        ]
+    },
+    {
+        "name": "Réception",
+        "capacité": 5,
+        "isRequired": true,
+        "members": [],
+        "rolesAccepte": [
+            "Réceptionniste",
+            "Manager",
+            "Nettoyage"
+        ]
+    },
+    {
+        "name": "Salle des serveurs",
+        "capacité": 3,
+        "isRequired": true,
+        "members": [],
+        "rolesAccepte": [
+            "Technicien IT",
+            "Manager",
+            "Nettoyage"
+        ]
+    },
+    {
+        "name": "Salle de sécurité",
+        "capacité": 4,
+        "isRequired": true,
+        "members": [],
+        "rolesAccepte": [
+            "Agent de sécurité",
+            "Manager",
+            "Nettoyage"
+        ]
+    },
+    {
+        "name": "Salle du personnel",
+        "capacité": 6,
+        "isRequired": false,
+        "members": [],
+        "rolesAccepte": [
+            "Manager",
+            "Nettoyage"
+        ]
+    },
+    {
+        "name": "Salle d’archives",
+        "capacité": 2,
+        "isRequired": true,
+        "members": [],
+        "rolesAccepte": [
+            "Manager"
+        ]
+    }
+]
