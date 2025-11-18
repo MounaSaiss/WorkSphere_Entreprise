@@ -44,7 +44,7 @@
     },
     {
         "name": "Salle du personnel",
-        "capacité": 6,
+        "capacité": 10,
         "isRequired": false,
         "members": [],
         "rolesAccepte": [
