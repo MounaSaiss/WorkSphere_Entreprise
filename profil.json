@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Mouna Saiss",
+        "role": "Receptionist",
+        "image": "user1.webp"
+    },
+    {
+        "id": 2,
+        "name": "Yasser Mardi",
+        "role": "Responsable IT",
+        "image": "user2.webp"
+    },
+    {
+        "id": 3,
+        "name": "Ali Amjad",
+        "role": "Manager",
+        "image": "user3.webp"
+    }
+]

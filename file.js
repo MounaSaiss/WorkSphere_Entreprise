@@ -9,7 +9,7 @@ let myInputs = form.querySelectorAll('input');
 
 function addImageProfil() {
     urlInput.onchange = function () {
-    profilpic.src = urlInput.value;
+        profilpic.src = urlInput.value;
     };
 }
 
@@ -74,11 +74,33 @@ function formModale() {
     });
 }
 
+function fetchDataFromJsonFile() {
+    fetch('./profil.json')
+        .then(Response => Response.json())
+        .then(data => {
+            const container = document.querySelector(".side-bare");
+            data.forEach(worker => {
+            const card = `
+            <div class="user-card" data-id="${worker.id}">
+            <img src="${worker.image}" alt="">
+            <div>
+                <h4>${worker.name}</h4>
+                <p>${worker.role}</p>
+            </div>
+            <button class="btn-edite-profil"><i class="fa-solid fa-user-pen"></i></button>
+            <button class="btn-affiche-profil"><i class="fa-solid fa-address-card"></i></button>
+            </div>
+            `;
+        container.innerHTML += card;
+            })
+        })
+}
 
 function initApp() {
     validationForm();
     addImageProfil();
     formModale();
+    fetchDataFromJsonFile();
 
     cancel.addEventListener('click', () => {
         urlInput.value = "";
@@ -88,19 +110,19 @@ function initApp() {
         })
     });
 
-    ajoute.addEventListener('click', function(event) {
-        let cardname=document.getElementById('card-name');
-        let cardrole=document.getElementById('card-role');
-        let cardimage=document.getElementById('image');
-    
-        event.preventDefault();
-        let namevalue=document.getElementById('name').value;
-        let rolevalue=document.getElementById('role').value;
-        let imagevalue=document.getElementById('url-input').value;
+    ajoute.addEventListener('click', function (event) {
+        let cardname = document.getElementById('card-name');
+        let cardrole = document.getElementById('card-role');
+        let cardimage = document.getElementById('image');
 
-        cardname.textContent=namevalue;
-        cardrole.textContent=rolevalue;
-        cardimage.src=imagevalue;
+        event.preventDefault();
+        let namevalue = document.getElementById('name').value;
+        let rolevalue = document.getElementById('role').value;
+        let imagevalue = document.getElementById('url-input').value;
+
+        cardname.textContent = namevalue;
+        cardrole.textContent = rolevalue;
+        cardimage.src = imagevalue;
         console.log();
 
         form.reset();
