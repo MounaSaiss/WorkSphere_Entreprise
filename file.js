@@ -3,8 +3,58 @@ let profilpic = document.getElementById("profil-pic");
 let urlInput = document.getElementById("url-input");
 const cancel = document.getElementById('close');
 const ajoute = document.getElementById("ajoute");
-let myInputs = form.querySelectorAll('input');
+const inputName = document.getElementById('name');
+const inputRole = document.getElementById('role');
+const inputImage = document.getElementById('url-input');
+// console.log(inputImage);
 
+let workers = [];
+
+function renderUnassignedList() {
+    const cardsContainer = document.getElementById("cards-container");
+    // cardsContainer.innerHTML = "";
+    if (!cardsContainer) return;
+    cardsContainer.innerHTML = workers.map((worker, index) => creatCardHtmlUnassignedWorkers(worker, index)).join("");
+
+    // console.log(cardsContainer);
+
+}
+
+
+const saveWorkersData = () => {
+    localStorage.setItem("workers", JSON.stringify(workers))
+}
+
+const louadDatavUnassignedWorkers = async () => {
+    const savedData = localStorage.getItem("workers")
+    // console.log(savedData)
+
+    if (savedData) {
+        workers = JSON.parse(savedData)
+
+    } else {
+        const response = await fetch("./profil.json");
+        workers = await response.json();
+        // console.log(workers)
+        saveWorkersData();
+    }
+    renderUnassignedList();
+}
+
+
+function creatCardHtmlUnassignedWorkers(worker, index) {
+    return `
+        <div class="user-card" data-id="${worker.id}">
+            <img src="${worker.image}" alt="">
+            <div>
+                <h4>${worker.name}</h4>
+                <p>${worker.role}</p>
+            </div>
+            <button class="btn-edite-profil"><i class="fa-solid fa-user-pen"></i></button>
+            <button class="btn-affiche-profil"><i class="fa-solid fa-address-card"></i></button>
+        </div>
+    `;
+}
 
 
 function addImageProfil() {
@@ -14,7 +64,7 @@ function addImageProfil() {
 }
 
 function validationForm() {
-    let validationRules = {
+    const validationRules = {
         name: {
             regex: /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{3,}$/,
             errorMessage: "Invalid Name."
@@ -27,38 +77,68 @@ function validationForm() {
             regex: /^(\+?\d{1,3}[- ]?)?\d{9,10}$/,
             errorMessage: "Invalid Phone."
         },
-    }
+        image: {
+            regex: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i,
+            errorMessage: "URL d'image invalide."
+        },
+    };
 
-    ajoute.addEventListener('click', validateFormEnhanced);
+    const myInputs = document.querySelectorAll("#signupForm input, #signupForm select");
+    // console.log(myInputs);
+    const ajoute = document.getElementById("ajoute");
+    // console.log(ajoute)
 
-    function validateFormEnhanced(event) {
+
+    ajoute.addEventListener('click', function (event) {
 
         event.preventDefault();
+        let formValid = true;
 
         myInputs.forEach(input => {
             let value = input.value.trim();
             let regex = validationRules[input.name].regex;
-            let errorSpan = document.getElementsByClassName(input.name)[0];
+            const errorSpan = document.querySelectorAll(`span.${input.name}`);
 
-            if (!value.match(regex)) {
-                input.style.border = "3px solid red";
-                errorSpan.innerText = validationRules[input.name].errorMessage;
-                errorSpan.style.color = 'red'
-            }
-            if (value === "") {
+            input.style.border = "";
+            errorSpan.innerHTML = "";
+
+            if (value === "" || (input.tagName === "SELECT" && value === "")) {
                 input.style.border = "3px solid orange";
                 errorSpan.innerText = "champ vide";
-                errorSpan.style.color = 'orange'
+                errorSpan.style.color = 'orange';
+                formValid = false;
+            }
+            else if (!value.match(regex)) {
+                input.style.border = "3px solid red";
+                errorSpan.innerText = validationRules[input.name].errorMessage;
+                errorSpan.style.color = 'red';
+                formValid = false;
             }
 
             else {
                 input.style.border = "3px solid green";
                 errorSpan.innerText = "";
             }
-        })
+        });
+        if (formValid) {
+        //     const newWorker = {
+        //     id: Date.now(),
+        //     name: inputName.value.trim(),
+        //     role: inputRole.value.trim(),
+        //     image: inputImage.value.trim(),
+        // };
+        // // console.log(newWorker);
+
+        // workers.push(newWorker);
+        // saveWorkersData();
+        // renderUnassignedList();
+
+        // form.reset();
+        // // form.style.display="hidden"
+        }
 
     }
-
+    )
 }
 
 function formModale() {
@@ -68,6 +148,7 @@ function formModale() {
 
     addWorker.addEventListener('click', () => {
         modalContainer.classList.add('show')
+
     });
     cancel.addEventListener('click', () => {
         modalContainer.classList.remove('show')
@@ -80,7 +161,7 @@ function fetchDataFromJsonFile() {
         .then(data => {
             const container = document.querySelector(".side-card");
             data.forEach(worker => {
-            const card = `
+                const card = `
             <div class="user-card" data-id="${worker.id}">
             <img src="${worker.image}" alt="">
             <div>
@@ -91,20 +172,23 @@ function fetchDataFromJsonFile() {
             <button class="btn-affiche-profil"><i class="fa-solid fa-address-card"></i></button>
             </div>
             `;
-        
-        container.innerHTML += card;
-        
+
+                container.innerHTML += card;
+
             })
-            
+
         })
-        container.appendChild(card);
+    container.appendChild(card);
 }
 
 function initApp() {
     validationForm();
     addImageProfil();
     formModale();
-    fetchDataFromJsonFile();
+    // fetchDataFromJsonFile();
+    // renderUnassignedList();
+    // saveWorkersData();
+    louadDatavUnassignedWorkers();
 
     cancel.addEventListener('click', () => {
         urlInput.value = "";
@@ -114,28 +198,27 @@ function initApp() {
         })
     });
 
-    // ajoute.addEventListener('click', function (event) {
-    //     let cardname = document.getElementById('card-name');
-    //     let cardrole = document.getElementById('card-role');
-    //     let cardimage = document.getElementById('image');
+    ajoute.addEventListener('click', function (event) {
+        event.preventDefault();
+        const newWorker = {
+            id: Date.now(),
+            name: inputName.value.trim(),
+            role: inputRole.value.trim(),
+            image: inputImage.value.trim(),
+        };
+        // console.log(newWorker);
 
-    //     event.preventDefault();
-    //     let namevalue = document.getElementById('name').value;
-    //     let rolevalue = document.getElementById('role').value;
-    //     let imagevalue = document.getElementById('url-input').value;
+        workers.push(newWorker);
+        saveWorkersData();
+        renderUnassignedList();
 
-    //     cardname.textContent = namevalue;
-    //     cardrole.textContent = rolevalue;
-    //     cardimage.src = imagevalue;
-    //     console.log();
-
-    //     form.reset();
-    //     urlInput.value = "";
-    //     profilpic.src = "icon-7797704_640.png";
-
-    // });
+        form.reset();
+        // form.style.display="hidden"
+    });
 
 }
+
+
 
 
 initApp();
