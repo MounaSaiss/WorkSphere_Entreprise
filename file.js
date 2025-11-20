@@ -12,13 +12,18 @@ const modalContainer = document.getElementById('modal-container');
 const addWorker = document.getElementById('open');
 
 
+// let  email=document.getElementById('email').value;
+
+// console.log(email)
+
+
 
 function renderUnassignedList() {
     const cardsContainer = document.getElementById("cards-container");
     cardsContainer.innerHTML = "";
-    // if (!cardsContainer) return;
-    cardsContainer.innerHTML = workers.map((worker, index) => creatCardHtmlUnassignedWorkers(worker, index)).join("");
-    // console.log(cardsContainer);
+    workers.forEach((worker) => {
+        cardsContainer.append(creatCardHtmlUnassignedWorkers(worker));
+    })
 }
 
 const saveWorkersData = () => {
@@ -41,18 +46,28 @@ const louadDatavUnassignedWorkers = async () => {
     renderUnassignedList();
 }
 
-function creatCardHtmlUnassignedWorkers(worker, index) {
-    return `
-        <div class="user-card" data-id="${worker.id}">
+function creatCardHtmlUnassignedWorkers(worker) {
+    const div = document.createElement('div');
+    div.className = "user-card";
+    div.setAttribute('data-id',worker.id );
+    div.innerHTML = `
             <img src="${worker.image}" alt="">
             <div>
                 <h4>${worker.name}</h4>
                 <p>${worker.role}</p>
             </div>
             <button class="btn-edite-profil"><i class="fa-solid fa-user-pen"></i></button>
-            <button class="btn-affiche-profil" id="affiche-profil"><i class="fa-solid fa-address-card"></i></button>
-        </div>
+            <button class="btn-affiche-profil"><i class="fa-solid fa-address-card"></i></button>
     `;
+
+    const btnAfficheProfile = div.querySelector('.btn-affiche-profil');
+    btnAfficheProfile.addEventListener('click', () => {
+        const CardAfficheProfil = document.getElementById("container-detail-profil");
+        CardAfficheProfil.innerHTML = "";
+        CardAfficheProfil.append(creatCardAfficheProfil(worker));
+        CardAfficheProfil.classList.add('show-profil');
+    });
+    return div;
 }
 
 function addImageProfil() {
@@ -146,19 +161,62 @@ function resetInputStyles() {
     profilpic.src = "icon-7797704_640.png";
 }
 
+// ====Affiche modale de détail de profil====
 
-function modaleAfficheProfil() {
-    const btnAfficheProfil = document.getElementById("affiche-profil")
-    const containerDetailProfil = document.getElementById("container-detail-profil")
-    const btnCloseProfil = document.getElementById("close-profil")
+function creatCardAfficheProfil(worker) {
 
-    btnAfficheProfil.addEventListener('click', () => {
-        containerDetailProfil.classList.add('show-profil')
+    const div = document.createElement('div');
+    div.className = "card-affiche-profil";
+    div.setAttribute('data-id',worker.id );
+    div.innerHTML = `
+            <div class="left-profil">
+                <img src="${worker.image}" alt="user">
+                <h4>${worker.name}</h4>
+                <p>${worker.role}</p>
+            </div>
+            <div class="right-profil">
+                <div class="info">
+                    <h3>Informations</h3>
+                    <div class="info-data">
+                        <div class="data">
+                            <h4>Email</h4>
+                            <p>${worker.email}</p>
+                        </div>
+                        <div class="data">
+                            <h4>Phone</h4>
+                            <p>${worker.phone}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="Expériences">
+                    <h3>Expériences</h3>
+                    <div class="info-data">
+                        <div class="data">
+                            <h4>Entrprise : ${worker.company}</h4>
+                            <p>Role : ${worker.role}</p>
+                            <p>date de début : ${worker.start}</p>
+                            <p>date de fin : ${worker.fin} </p>
+                        </div>
+                    </div>
+                </div>
+                <button id="close-profil" class="button-profil">Close</button>
+            </div>
+    `;
+
+    const btnCloseModale = div.querySelector('.button-profil');
+    btnCloseModale.addEventListener('click', ()  => {
+        const containerDetailProfil = document.getElementById("container-detail-profil");
+        containerDetailProfil.classList.remove('show-profil');
     })
-    btnCloseProfil.addEventListener('click', () => {
-        containerDetailProfil.classList.remove('show-profil')
-    })
+
+    return div;
 }
+
+// =====function Gérer zones =====
+// const btnAjouteAtZone = document.querySelectorAll(".btn-plus")
+// console.log(btnAjouteAtZone);
+
+
 
 
 
@@ -167,7 +225,8 @@ function initApp() {
     addImageProfil();
     formModale();
     louadDatavUnassignedWorkers();
-    modaleAfficheProfil();
+    saveWorkersData();
+
 
     cancel.addEventListener('click', () => {
         urlInput.value = "";

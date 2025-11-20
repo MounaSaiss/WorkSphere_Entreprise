@@ -10,7 +10,8 @@
     width: 100vw;
     opacity: 0;
     pointer-events: none;
-    /* transition: opacity .3s ease; */
+    transition: opacity .3s ease;
+    
 }
 
 #container-detail-profil.show-profil {
@@ -59,7 +60,7 @@
 }
 
 .info,
-.Emailxpériences {
+.Expériences {
     margin-bottom: 30px;
 }
 

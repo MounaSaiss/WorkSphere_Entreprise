@@ -1,0 +1,49 @@
+[
+    {
+    "name": "Alice",
+    "department": "IT",
+    "experiences": [
+            "Frontend Developer",
+            "React Developer"
+        ]
+    },
+    {
+    "name": "Karim",
+    "department": "HR",
+    "experiences": [
+            "Recruitment Specialist"
+        ]
+    },
+    {
+    "name": "Sofia",
+    "department": "Finance",
+    "experiences": [
+            "Accountant",
+            "Financial Analyst",
+            "Risk Advisor"
+        ]
+    },
+    {
+    "name": "Youssef",
+    "department": "IT",
+    "experiences": [
+            "DevOps Engineer",
+            "Cloud Architect"
+        ]
+    },
+    {
+    "name": "Maya",
+    "department": "Marketing",
+    "experiences": [
+            "Content Creator",
+            "SEO Specialist"
+        ]
+    },
+    {
+    "name": "Omar",
+    "department": "Finance",
+    "experiences": [
+            "Junior Accountant"
+        ]
+    }
+]

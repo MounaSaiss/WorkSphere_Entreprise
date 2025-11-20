@@ -1,0 +1,48 @@
+.modal-assign {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-assign.show {
+    display: flex;
+}
+
+.modal-content {
+    width: 450px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.employees-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.employee-card {
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.employee-card:hover {
+    background: #e6e6e6;
+}
+
+.employee-card img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
