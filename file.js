@@ -1,4 +1,5 @@
 let workers = [];
+let tempExperience = [];
 let form = document.getElementById("signupForm");
 let profilpic = document.getElementById("profil-pic");
 let urlInput = document.getElementById("url-input");
@@ -10,6 +11,14 @@ const inputImage = document.getElementById('url-input');
 const myInputs = document.querySelectorAll("#signupForm input, #signupForm select");
 const modalContainer = document.getElementById('modal-container');
 const addWorker = document.getElementById('open');
+
+// inputs of expernce
+const entrepriseId = document.getElementById('experienceId');
+const entrepriseName = document.getElementById('entreprise-name');
+const entrepriseRole = document.getElementById('entreprise-role');
+const entrepriseStart = document.getElementById('start-expérience');
+const entrepriseEnd = document.getElementById('end-expérience');
+const btnSaveEntreprise = document.getElementById('save-expérience');
 
 
 // let  email=document.getElementById('email').value;
@@ -49,7 +58,7 @@ const louadDatavUnassignedWorkers = async () => {
 function creatCardHtmlUnassignedWorkers(worker) {
     const div = document.createElement('div');
     div.className = "user-card";
-    div.setAttribute('data-id',worker.id );
+    div.setAttribute('data-id', worker.id);
     div.innerHTML = `
             <img src="${worker.image}" alt="">
             <div>
@@ -103,33 +112,33 @@ function validationForm() {
 
     let formValid = true;
 
-    myInputs.forEach(input => {
-        if (validationRules[input.name]) {
-            let value = input.value.trim();
-            let regex = validationRules[input.name].regex;
-            const errorSpan = document.querySelectorAll(`span.${input.name}`);
+    // myInputs.forEach(input => {
+    //     if (validationRules[input.name]) {
+    //         let value = input.value.trim();
+    //         let regex = validationRules[input.name].regex;
+    //         const errorSpan = document.querySelectorAll(`span.${input.name}`);
 
-            input.style.border = "";
-            errorSpan.innerHTML = "";
+    //         input.style.border = "";
+    //         errorSpan.innerHTML = "";
 
-            if (value === "" || (input.tagName === "SELECT" && value === "")) {
-                input.style.border = "3px solid orange";
-                errorSpan.innerText = "champ vide";
-                errorSpan.style.color = 'orange';
-                formValid = false;
-            }
-            else if (!value.match(regex)) {
-                input.style.border = "3px solid red";
-                errorSpan.innerText = validationRules[input.name].errorMessage;
-                errorSpan.style.color = 'red';
-                formValid = false;
-            }
-            else {
-                input.style.border = "3px solid green";
-                errorSpan.innerText = "";
-            }
-        }
-    });
+    //         if (value === "" || (input.tagName === "SELECT" && value === "")) {
+    //             input.style.border = "3px solid orange";
+    //             errorSpan.innerText = "champ vide";
+    //             errorSpan.style.color = 'orange';
+    //             formValid = false;
+    //         }
+    //         else if (!value.match(regex)) {
+    //             input.style.border = "3px solid red";
+    //             errorSpan.innerText = validationRules[input.name].errorMessage;
+    //             errorSpan.style.color = 'red';
+    //             formValid = false;
+    //         }
+    //         else {
+    //             input.style.border = "3px solid green";
+    //             errorSpan.innerText = "";
+    //         }
+    //     }
+    // });
     return formValid;
 }
 
@@ -167,7 +176,7 @@ function creatCardAfficheProfil(worker) {
 
     const div = document.createElement('div');
     div.className = "card-affiche-profil";
-    div.setAttribute('data-id',worker.id );
+    div.setAttribute('data-id', worker.id);
     div.innerHTML = `
             <div class="left-profil">
                 <img src="${worker.image}" alt="user">
@@ -191,12 +200,15 @@ function creatCardAfficheProfil(worker) {
                 <div class="Expériences">
                     <h3>Expériences</h3>
                     <div class="info-data">
-                        <div class="data">
-                            <h4>Entrprise : ${worker.company}</h4>
-                            <p>Role : ${worker.role}</p>
-                            <p>date de début : ${worker.start}</p>
-                            <p>date de fin : ${worker.fin} </p>
+                    ${worker.experiences.map((ex) => `
+                         <div class="data">
+                            <h4>Entrprise : ${ex.name}</h4>
+                            <p>Role : ${ex.role}</p>
+                            <p>date de début : ${ex.start}</p>
+                            <p>date de fin : ${ex.end} </p>
                         </div>
+                        `).join('')}
+                       
                     </div>
                 </div>
                 <button id="close-profil" class="button-profil">Close</button>
@@ -204,7 +216,7 @@ function creatCardAfficheProfil(worker) {
     `;
 
     const btnCloseModale = div.querySelector('.button-profil');
-    btnCloseModale.addEventListener('click', ()  => {
+    btnCloseModale.addEventListener('click', () => {
         const containerDetailProfil = document.getElementById("container-detail-profil");
         containerDetailProfil.classList.remove('show-profil');
     })
@@ -212,9 +224,107 @@ function creatCardAfficheProfil(worker) {
     return div;
 }
 
-// =====function Gérer zones =====
-// const btnAjouteAtZone = document.querySelectorAll(".btn-plus")
-// console.log(btnAjouteAtZone);
+// =====function Gérer les experince =====
+
+
+function renderExperience() {
+    const containerExpérience = document.getElementById('containerExpérience');
+    containerExpérience.innerHTML = '';
+
+    tempExperience.forEach((ex) => {
+        containerExpérience.append(createCardExperience(ex));
+    })
+}
+
+function createCardExperience(ex) {
+    const div = document.createElement('div');
+    // div.className = ""
+
+    div.innerHTML = `
+        <h4>Entrprise : ${ex.name}</h4>
+        <p>Role : ${ex.role}</p>
+        <p>date de début : ${ex.start}</p>
+        <p>date de fin : ${ex.end} </p>
+
+         <button class="btn-edite-experience"><i class="fa-solid fa-user-pen"></i></button>
+        <button class="btn-delete-experience"><i class="fa-solid fa-address-card"></i></button>
+    `;
+
+    // btn edit , delete
+    const btnEdit = div.querySelector('.btn-edite-experience');
+    btnEdit.addEventListener('click', () => {
+        fillExperience(ex);
+    })
+
+    const btnDelete = div.querySelector('.btn-delete-experience');
+    btnDelete.addEventListener('click', () => {
+        tempExperience.splice(tempExperience.findIndex((e) => e.id == ex.id), 1);
+        renderExperience();
+    })
+
+    return div;
+}
+
+function validateFormExperience() {
+    let isValide = true;
+    const nameValue = entrepriseName.value.trim();
+    const roleValue = entrepriseRole.value.trim();
+    const startDateValue = entrepriseStart.value.trim();
+    const endDateValue = entrepriseEnd.value.trim();
+    const idValue = entrepriseId.value.trim() || null;
+
+
+    if (nameValue.length === 0) {
+        entrepriseName.nextElementSibling.textContent = 'obligatoire'
+        isValide = false;
+    } else {
+        entrepriseName.nextElementSibling.textContent = ''
+    }
+
+    if (roleValue.length === 0) {
+        entrepriseRole.nextElementSibling.textContent = 'obligatoire'
+        isValide = false;
+    } else {
+        entrepriseRole.nextElementSibling.textContent = ''
+    }
+
+    if (startDateValue.length === 0) {
+        entrepriseStart.nextElementSibling.textContent = 'obligatoire'
+        isValide = false;
+    } else {
+        entrepriseStart.nextElementSibling.textContent = ''
+    }
+
+    if(isValide) {
+        const ex = {
+            id: idValue,
+            name: nameValue,
+            role: roleValue,
+            start: startDateValue,
+            end: endDateValue
+        };
+
+        return ex;
+    }
+    
+    return null;
+}
+
+function fillExperience(ex) {
+    entrepriseId.value = ex.id;
+    entrepriseName.value = ex.name;
+    entrepriseRole.value = ex.role;
+    entrepriseStart.value = ex.start;
+    entrepriseEnd.value = ex.end;
+}
+
+function clearExperience() {
+    entrepriseId.value = '';
+    entrepriseName.value = '';
+    entrepriseRole.value = '';
+    entrepriseStart.value = '';
+    entrepriseEnd.value = '';
+}
 
 
 
@@ -245,6 +355,7 @@ function initApp() {
                 name: inputName.value.trim(),
                 role: inputRole.value.trim(),
                 image: inputImage.value.trim(),
+                experiences: tempExperience
             };
             // console.log(newWorker);
             workers.push(newWorker);
@@ -258,6 +369,24 @@ function initApp() {
         }
     })
 
+    btnSaveEntreprise.addEventListener('click', () => {
+        const ex = validateFormExperience();
+
+        if(ex) {
+            // edit
+            if(ex.id) {
+                tempExperience[tempExperience.findIndex((e) => e.id == ex.id)] = ex;
+            }
+            // add
+            else {
+                ex.id = Date.now();
+                tempExperience.push(ex);
+            }
+            
+            clearExperience();
+            renderExperience();
+        }
+    })
 }
 
 

@@ -150,33 +150,38 @@
                 </div>
                 <div>
                     <label style="text-decoration: underline; padding: 10px;">Expériences</label>
+                    <input type="hidden" id="experienceId">
                     <div class="form-group">
                         <label for="phone" style="margin-left: 30px;">Entreprise :</label>
                         <input type="text" id="entreprise-name" name="entreprise" placeholder="Entrer nom d'entreprise"
                             required style="margin-left: 30px;">
-                        <span class="entreprise"></span>
+                        <span style="color: red;"></span>
                     </div>
                     <div class="form-group">
                         <label for="phone" style="margin-left: 30px;">Rôle :</label>
                         <input type="text" id="entreprise-role" name="role" placeholder="Entrer role" required
                             style="margin-left: 30px;">
-                        <span class="role"></span>
+                        <span style="color: red;"></span>
                     </div>
                     <div class="form-group">
                         <label for="phone" style="margin-left: 30px;">Depuis :</label>
                         <input type="date" id="start-expérience" name="date" placeholder="" required
                             style="margin-left: 30px;">
-                        <span class="start"></span>
+                        <span style="color: red;"></span>
                     </div>
                     <div class="form-group">
                         <label for="phone" style="margin-left: 30px;">À :</label>
                         <input type="date" id="end-expérience" name="date" placeholder="" required
                             style="margin-left: 30px;">
-                        <span class="end"></span>
+                        <span style="color: red;"></span>
                     </div>
                     <div>
-                        <button type="button" id="add-expérience">Ajouter nouvelle Expérience</button>
+                        <button type="button" id="save-expérience">Enregistrait Expérience</button>
                     </div>
+                </div>
+
+                <div style="margin: 10px 0;" id="containerExpérience">
+
                 </div>
 
                 <div class="form-group">
