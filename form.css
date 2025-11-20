@@ -18,6 +18,9 @@ h2 {
 .form-group {
     margin-bottom: 15px;
 }
+.form-input {
+    margin-bottom: 15px;
+}
 
 label {
     display: block;

@@ -123,12 +123,13 @@
         <div class="container-form" id="modal">
             <h2 style="color: blue;">Add New Worker</h2>
             <form id="signupForm" novalidate>
-                <div class="form-group">
+                 <input type="hidden" id="workerId">
+                <div class="form-input">
                     <label for="name">Nom complet</label>
                     <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
                     <span class="name"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-input">
                     <label for="role">Rôle</label>
                     <select id="role" name="role" required>
                         <option value="" class="my-input">-- Choisissez un rôle --</option>
@@ -141,7 +142,7 @@
                         <span class="role"></span>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-input">
                     <label for="image"> Photo (URL)</label>
                     <input type="text" name="image" id="url-input" placeholder="Enter image URL" required
                         class="my-input">
@@ -184,7 +185,7 @@
 
                 </div>
 
-                <div class="form-group">
+                <div class="form-input">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="exemple@mail.com" required
                         class="my-input">
@@ -192,7 +193,7 @@
                 </div>
 
 
-                <div class="form-group">
+                <div class="form-input">
                     <label for="phone">Téléphone</label>
                     <input type="tel" id="phone" name="phone" placeholder="+212 " required class="my-input">
                     <span class="phone"></span>

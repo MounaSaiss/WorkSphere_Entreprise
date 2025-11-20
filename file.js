@@ -1,14 +1,25 @@
 let workers = [];
 let tempExperience = [];
 let form = document.getElementById("signupForm");
-let profilpic = document.getElementById("profil-pic");
-let urlInput = document.getElementById("url-input");
+const profilpic = document.getElementById("profil-pic");
+// console.log(profilpic)
+const inputWorkerId = document.getElementById('workerId');
 const cancel = document.getElementById('close');
 const ajoute = document.getElementById("ajoute");
+
 const inputName = document.getElementById('name');
 const inputRole = document.getElementById('role');
+const urlInput = document.getElementById("url-input");
+const inputEmail = document.getElementById('email');
+const inputPhone = document.getElementById('phone');
+
+// console.log(inputemail)
+
+
+
 const inputImage = document.getElementById('url-input');
-const myInputs = document.querySelectorAll("#signupForm input, #signupForm select");
+const myInputs = document.querySelectorAll(".form-input input, .form-input select");
+// console.log(myInputs)
 const modalContainer = document.getElementById('modal-container');
 const addWorker = document.getElementById('open');
 
@@ -21,7 +32,6 @@ const entrepriseEnd = document.getElementById('end-expérience');
 const btnSaveEntreprise = document.getElementById('save-expérience');
 
 
-// let  email=document.getElementById('email').value;
 
 // console.log(email)
 
@@ -76,6 +86,13 @@ function creatCardHtmlUnassignedWorkers(worker) {
         CardAfficheProfil.append(creatCardAfficheProfil(worker));
         CardAfficheProfil.classList.add('show-profil');
     });
+
+    const editProfil = div.querySelector('.btn-edite-profil');
+    editProfil.addEventListener('click', () => {
+        openModal();
+        fillform(worker);
+
+    });
     return div;
 }
 
@@ -112,33 +129,33 @@ function validationForm() {
 
     let formValid = true;
 
-    // myInputs.forEach(input => {
-    //     if (validationRules[input.name]) {
-    //         let value = input.value.trim();
-    //         let regex = validationRules[input.name].regex;
-    //         const errorSpan = document.querySelectorAll(`span.${input.name}`);
+    myInputs.forEach(input => {
+        if (validationRules[input.name]) {
+            let value = input.value.trim();
+            let regex = validationRules[input.name].regex;
+            const errorSpan = document.querySelectorAll(`span.${input.name}`);
 
-    //         input.style.border = "";
-    //         errorSpan.innerHTML = "";
+            input.style.border = "";
+            errorSpan.innerHTML = "";
 
-    //         if (value === "" || (input.tagName === "SELECT" && value === "")) {
-    //             input.style.border = "3px solid orange";
-    //             errorSpan.innerText = "champ vide";
-    //             errorSpan.style.color = 'orange';
-    //             formValid = false;
-    //         }
-    //         else if (!value.match(regex)) {
-    //             input.style.border = "3px solid red";
-    //             errorSpan.innerText = validationRules[input.name].errorMessage;
-    //             errorSpan.style.color = 'red';
-    //             formValid = false;
-    //         }
-    //         else {
-    //             input.style.border = "3px solid green";
-    //             errorSpan.innerText = "";
-    //         }
-    //     }
-    // });
+            if (value === "" || (input.tagName === "SELECT" && value === "")) {
+                input.style.border = "3px solid orange";
+                errorSpan.innerText = "champ vide";
+                errorSpan.style.color = 'orange';
+                formValid = false;
+            }
+            else if (!value.match(regex)) {
+                input.style.border = "3px solid red";
+                errorSpan.innerText = validationRules[input.name].errorMessage;
+                errorSpan.style.color = 'red';
+                formValid = false;
+            }
+            else {
+                input.style.border = "3px solid green";
+                errorSpan.innerText = "";
+            }
+        }
+    });
     return formValid;
 }
 
@@ -150,6 +167,8 @@ function formModale() {
     cancel.addEventListener('click', () => {
         closeModal()
     });
+
+
 }
 
 // ====close Modale de Formulaire====
@@ -246,8 +265,8 @@ function createCardExperience(ex) {
         <p>date de début : ${ex.start}</p>
         <p>date de fin : ${ex.end} </p>
 
-         <button class="btn-edite-experience"><i class="fa-solid fa-user-pen"></i></button>
-        <button class="btn-delete-experience"><i class="fa-solid fa-address-card"></i></button>
+        <button class="btn-edite-experience" type="button"><i class="fa-solid fa-user-pen"></i></button>
+        <button class="btn-delete-experience" type="button"><i class="fa-solid fa-address-card"></i></button>
     `;
 
     // btn edit , delete
@@ -295,7 +314,7 @@ function validateFormExperience() {
         entrepriseStart.nextElementSibling.textContent = ''
     }
 
-    if(isValide) {
+    if (isValide) {
         const ex = {
             id: idValue,
             name: nameValue,
@@ -306,7 +325,7 @@ function validateFormExperience() {
 
         return ex;
     }
-    
+
     return null;
 }
 
@@ -316,6 +335,18 @@ function fillExperience(ex) {
     entrepriseRole.value = ex.role;
     entrepriseStart.value = ex.start;
     entrepriseEnd.value = ex.end;
+}
+
+function fillform(worker) {
+    inputWorkerId.value = worker.id;
+    inputName.value = worker.name;
+    inputRole.value = worker.role;
+    urlInput.value = worker.image;
+    profilpic.src = worker.image;
+    inputEmail.value = worker.email;
+    inputPhone.value = worker.phone;
+    tempExperience = worker.experiences;
+    renderExperience();
 }
 
 function clearExperience() {
@@ -344,26 +375,42 @@ function initApp() {
         myInputs.forEach(input => {
             input.style.border = "1px solid #ccc";
         })
+        tempExperience = [];
+        renderExperience();
     });
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
         if (validationForm()) {
+            const workerID = inputWorkerId.value || null;
             const newWorker = {
-                id: Date.now(),
+                id: workerID,
                 name: inputName.value.trim(),
                 role: inputRole.value.trim(),
                 image: inputImage.value.trim(),
+                email: inputEmail.value.trim(),
+                phone: inputPhone.value.trim(),
                 experiences: tempExperience
             };
-            // console.log(newWorker);
-            workers.push(newWorker);
+
+            // edit
+            if (newWorker.id) {
+                workers[workers.findIndex((w) => w.id == newWorker.id)] = newWorker;
+            }
+
+            // add
+            else {
+                newWorker.id = Date.now();
+                workers.push(newWorker);
+            }
+
             saveWorkersData();
             renderUnassignedList();
 
             form.reset();
-
+            tempExperience = [];
+            renderExperience();
             closeModal();
             resetInputStyles();
         }
@@ -372,9 +419,9 @@ function initApp() {
     btnSaveEntreprise.addEventListener('click', () => {
         const ex = validateFormExperience();
 
-        if(ex) {
+        if (ex) {
             // edit
-            if(ex.id) {
+            if (ex.id) {
                 tempExperience[tempExperience.findIndex((e) => e.id == ex.id)] = ex;
             }
             // add
@@ -382,7 +429,7 @@ function initApp() {
                 ex.id = Date.now();
                 tempExperience.push(ex);
             }
-            
+
             clearExperience();
             renderExperience();
         }
