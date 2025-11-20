@@ -7,6 +7,7 @@
     <title>WorkSphereEntreprise</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="détailProfeil.css">
     <script src="https://kit.fontawesome.com/a680a19743.js" crossorigin="anonymous"></script>
 </head>
 
@@ -15,10 +16,11 @@
         <div class="side-bare">
             <h2>Unassigned Staff</h2>
             <button class="btn-ajoute-newworker" id="open">+ Add New Worker</button>
-            <div class="side-card"  id="cards-container">
-                
+            <div class="side-card" id="cards-container">
+                <button class="btn-edite-profil"><i class="fa-solid fa-user-pen"></i></button>
+                <button class="btn-affiche-profil" id="affiche-profil"><i class="fa-solid fa-address-card"></i></button>
             </div>
-            
+
         </div>
 
         <div class="section-zone">
@@ -117,85 +119,128 @@
 
     <section id="modal-container" class="modal-container">
         <div class="container-form" id="modal">
-        <h2 style="color: blue;">Add New Worker</h2>
-        <form id="signupForm" novalidate>
-            <div class="form-group">
-                <label for="name">Nom complet</label>
-                <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
-                <span class="name"></span>
-            </div>
-            <div class="form-group">
-                <label for="role">Rôle</label>
-                <select id="role" name="role" required>
-                    <option value="" class="my-input">-- Choisissez un rôle --</option>
-                    <option value="manager">Manager</option>
-                    <option value="nettoyage">Nettoyage</option>
-                    <option value="receptionniste">Réceptionniste</option>
-                    <option value="technicien">Technicien IT</option>
-                    <option value="securite">Agent de sécurité</option>
-                    <option value="securite">Autre </option>
-                    <span class="role"></span>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="image"> Photo (URL)</label>
-                <input type="text" name="image" id="url-input" placeholder="Enter image URL" required class="my-input">
-                <span class="image"></span>
-                <img class="card-img" alt="profil-image" id="profil-pic" src="icon-7797704_640.png">
-            </div>
-            <div>
-                <label style="text-decoration: underline; padding: 10px;">Expériences</label>
+            <h2 style="color: blue;">Add New Worker</h2>
+            <form id="signupForm" novalidate>
                 <div class="form-group">
-                    <label for="phone" style="margin-left: 30px;">Entreprise :</label>
-                    <input type="text" id="entreprise-name" name="entreprise" placeholder="Entrer nom d'entreprise" required style="margin-left: 30px;">
-                    <span class="entreprise"></span>
+                    <label for="name">Nom complet</label>
+                    <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
+                    <span class="name"></span>
                 </div>
                 <div class="form-group">
-                    <label for="phone" style="margin-left: 30px;">Rôle :</label>
-                    <input type="text" id="entreprise-role" name="role" placeholder="Entrer role" required style="margin-left: 30px;">
-                    <span class="role"></span>
+                    <label for="role">Rôle</label>
+                    <select id="role" name="role" required>
+                        <option value="" class="my-input">-- Choisissez un rôle --</option>
+                        <option value="manager">Manager</option>
+                        <option value="nettoyage">Nettoyage</option>
+                        <option value="receptionniste">Réceptionniste</option>
+                        <option value="technicien">Technicien IT</option>
+                        <option value="securite">Agent de sécurité</option>
+                        <option value="securite">Autre </option>
+                        <span class="role"></span>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="phone" style="margin-left: 30px;">Depuis :</label>
-                    <input type="date" id="start-expérience" name="date" placeholder="" required style="margin-left: 30px;">
-                    <span class="start"></span>
-                </div>
-                <div class="form-group">
-                    <label for="phone" style="margin-left: 30px;">À :</label>
-                    <input type="date" id="end-expérience" name="date" placeholder="" required style="margin-left: 30px;">
-                    <span class="end"></span>
+                    <label for="image"> Photo (URL)</label>
+                    <input type="text" name="image" id="url-input" placeholder="Enter image URL" required
+                        class="my-input">
+                    <span class="image"></span>
+                    <img class="card-img" alt="profil-image" id="profil-pic" src="icon-7797704_640.png">
                 </div>
                 <div>
-                    <button type="button" id="add-expérience">Ajouter nouvelle Expérience</button>
+                    <label style="text-decoration: underline; padding: 10px;">Expériences</label>
+                    <div class="form-group">
+                        <label for="phone" style="margin-left: 30px;">Entreprise :</label>
+                        <input type="text" id="entreprise-name" name="entreprise" placeholder="Entrer nom d'entreprise"
+                            required style="margin-left: 30px;">
+                        <span class="entreprise"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" style="margin-left: 30px;">Rôle :</label>
+                        <input type="text" id="entreprise-role" name="role" placeholder="Entrer role" required
+                            style="margin-left: 30px;">
+                        <span class="role"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" style="margin-left: 30px;">Depuis :</label>
+                        <input type="date" id="start-expérience" name="date" placeholder="" required
+                            style="margin-left: 30px;">
+                        <span class="start"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" style="margin-left: 30px;">À :</label>
+                        <input type="date" id="end-expérience" name="date" placeholder="" required
+                            style="margin-left: 30px;">
+                        <span class="end"></span>
+                    </div>
+                    <div>
+                        <button type="button" id="add-expérience">Ajouter nouvelle Expérience</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="exemple@mail.com" required class="my-input">
-                <span class="email"></span>
-            </div>
-
-
-            <div class="form-group">
-                <label for="phone">Téléphone</label>
-                <input type="tel" id="phone" name="phone" placeholder="+212 " required class="my-input">
-                <span class="phone"></span>
-            </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="exemple@mail.com" required
+                        class="my-input">
+                    <span class="email"></span>
+                </div>
 
 
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+212 " required class="my-input">
+                    <span class="phone"></span>
+                </div>
 
-            <button type="submit" id="ajoute">Ajouter</button>
-            <button type="reset" style="margin-top:10px; background-color: orangered;" id="close">Cancel</button>
 
 
-            <p id="message" style="color:red; font-weight:bold; margin-top:10px;"></p>
-            <p id="valider" style="color:rgb(63, 150, 5); font-weight:bold; margin-top:10px;"></p>
-        </form>
-    </div>
+                <button type="submit" id="ajoute">Ajouter</button>
+                <button type="reset" style="margin-top:10px; background-color: orangered;" id="close">Cancel</button>
 
+
+                <p id="message" style="color:red; font-weight:bold; margin-top:10px;"></p>
+                <p id="valider" style="color:rgb(63, 150, 5); font-weight:bold; margin-top:10px;"></p>
+            </form>
+        </div>
     </section>
 
+    <section id="container-detail-profil" class="container-detail-profil">
+        <div class="card-affiche-profil">
+            <div class="left-profil">
+                <img src="user1.webp" alt="user">
+                <h4>Mouna Saiss</h4>
+                <p>Technicien IT</p>
+            </div>
+            <div class="right-profil">
+                <div class="info">
+                    <h3>Information</h3>
+                    <div class="info-data">
+                        <div class="data">
+                            <h4>Email</h4>
+                            <p>mouna1.saiss@gmail.com</p>
+                        </div>
+                        <div class="data">
+                            <h4>Phone</h4>
+                            <p>0633740283</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="Emailxpériences">
+                    <h3>Information</h3>
+                    <div class="info-data">
+                        <div class="data">
+                            <h4>recent</h4>
+                            <p>Lorem ipsum dolor sit .</p>
+                        </div>
+                        <div class="data">
+                            <h4>Most Viewed</h4>
+                            <p>dolor sit amet.</p>
+                        </div>
+                    </div>
+                </div>
+                <button id="close-profil" class="button-profil">Close</button>
+            </div>
+        </div>
+    </section>
     <script src="file.js"></script>
 </body>
 

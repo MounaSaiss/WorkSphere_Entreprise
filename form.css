@@ -122,4 +122,10 @@ pointer-events: auto;
     max-width: 100%;
 }
 
+.outModale{
+    /* opacity: 0;
+    pointer-events: none; */
+    display: none;
+}
+
 

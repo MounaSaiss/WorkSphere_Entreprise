@@ -1,0 +1,149 @@
+#container-detail-profil {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    opacity: 0;
+    pointer-events: none;
+    /* transition: opacity .3s ease; */
+}
+
+#container-detail-profil.show-profil {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.card-affiche-profil {
+    display: flex;
+    width: 750px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.left-profil {
+    width: 30%;
+    text-align: center;
+    border-right: 1px solid #e6e6e6;
+    padding-right: 30px;
+}
+
+.left-profil img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.left-profil h4 {
+    margin: 10px 0 5px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.left-profil p {
+    color: #777;
+    font-size: 14px;
+}
+
+.right-profil {
+    width: 70%;
+    padding-left: 40px;
+}
+
+.info,
+.Emailxpériences {
+    margin-bottom: 30px;
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+    position: relative;
+}
+
+h3::after {
+    content: "";
+    width: 40px;
+    height: 3px;
+    background: #0145ab;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    border-radius: 10px;
+}
+
+.info-data {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.data {
+    width: 45%;
+    margin-bottom: 15px;
+}
+
+.data h4 {
+    font-size: 15px;
+    color: #0145ab;
+    margin-bottom: 5px;
+}
+
+.data p {
+    color: #555;
+    font-size: 14px;
+}
+
+.button-profil {
+    background: #ff4d4d;
+    color: white;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
+}
+
+.button-profil:hover {
+    background: #e63939;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(255, 77, 77, 0.4);
+}
+
+
+@media (max-width: 700px) {
+    .card-affiche-profil {
+        flex-direction: column;
+        text-align: center;
+        width: 90%;
+        padding: 20px;
+    }
+
+    .left-profil {
+        width: 100%;
+        border: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .right-profil {
+        width: 100%;
+        padding: 0;
+    }
+
+    .data {
+        width: 100%;
+    }
+}

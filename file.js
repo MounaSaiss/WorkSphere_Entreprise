@@ -1,3 +1,4 @@
+let workers = [];
 let form = document.getElementById("signupForm");
 let profilpic = document.getElementById("profil-pic");
 let urlInput = document.getElementById("url-input");
@@ -6,8 +7,11 @@ const ajoute = document.getElementById("ajoute");
 const inputName = document.getElementById('name');
 const inputRole = document.getElementById('role');
 const inputImage = document.getElementById('url-input');
-// console.log(inputImage);
-let workers = [];
+const myInputs = document.querySelectorAll("#signupForm input, #signupForm select");
+const modalContainer = document.getElementById('modal-container');
+const addWorker = document.getElementById('open');
+
+
 
 function renderUnassignedList() {
     const cardsContainer = document.getElementById("cards-container");
@@ -46,7 +50,7 @@ function creatCardHtmlUnassignedWorkers(worker, index) {
                 <p>${worker.role}</p>
             </div>
             <button class="btn-edite-profil"><i class="fa-solid fa-user-pen"></i></button>
-            <button class="btn-affiche-profil"><i class="fa-solid fa-address-card"></i></button>
+            <button class="btn-affiche-profil" id="affiche-profil"><i class="fa-solid fa-address-card"></i></button>
         </div>
     `;
 }
@@ -56,7 +60,7 @@ function addImageProfil() {
         profilpic.src = urlInput.value;
     };
 }
-
+// ====function pour valider le formulaire====
 function validationForm() {
     const validationRules = {
         name: {
@@ -72,23 +76,20 @@ function validationForm() {
             errorMessage: "Invalid Phone."
         },
         image: {
-            regex: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i,
+            regex: /^(https?:\/\/.*\.)/i,
             errorMessage: "URL d'image invalide."
+        },
+        role: {
+            regex: /[a-zA-Z0-9]+/,
+            errorMessage: "Role Obligatoire."
         },
     };
 
-    const myInputs = document.querySelectorAll("#signupForm input, #signupForm select");
-    // console.log(myInputs);
-    const ajoute = document.getElementById("ajoute");
-    // console.log(ajoute)
 
+    let formValid = true;
 
-    ajoute.addEventListener('click', function (event) {
-
-        event.preventDefault();
-        let formValid = true;
-
-        myInputs.forEach(input => {
+    myInputs.forEach(input => {
+        if (validationRules[input.name]) {
             let value = input.value.trim();
             let regex = validationRules[input.name].regex;
             const errorSpan = document.querySelectorAll(`span.${input.name}`);
@@ -108,81 +109,65 @@ function validationForm() {
                 errorSpan.style.color = 'red';
                 formValid = false;
             }
-
             else {
                 input.style.border = "3px solid green";
                 errorSpan.innerText = "";
             }
-        });
-        if (formValid) {
-        //     const newWorker = {
-        //     id: Date.now(),
-        //     name: inputName.value.trim(),
-        //     role: inputRole.value.trim(),
-        //     image: inputImage.value.trim(),
-        // };
-        // // console.log(newWorker);
-
-        // workers.push(newWorker);
-        // saveWorkersData();
-        // renderUnassignedList();
-
-        // form.reset();
-        // // form.style.display="hidden"
         }
-
-    }
-    )
+    });
+    return formValid;
 }
 
+// ======open Formulaire modale======
 function formModale() {
-    const addWorker = document.getElementById('open');
-    const modalContainer = document.getElementById('modal-container');
-    const cancel = document.getElementById('close');
-
     addWorker.addEventListener('click', () => {
-        modalContainer.classList.add('show')
-
+        openModal()
     });
     cancel.addEventListener('click', () => {
-        modalContainer.classList.remove('show')
+        closeModal()
     });
 }
 
-function fetchDataFromJsonFile() {
-    fetch('./profil.json')
-        .then(Response => Response.json())
-        .then(data => {
-            const container = document.querySelector(".side-card");
-            data.forEach(worker => {
-                const card = `
-            <div class="user-card" data-id="${worker.id}">
-            <img src="${worker.image}" alt="">
-            <div>
-                <h4>${worker.name}</h4>
-                <p>${worker.role}</p>
-            </div>
-            <button class="btn-edite-profil"><i class="fa-solid fa-user-pen"></i></button>
-            <button class="btn-affiche-profil"><i class="fa-solid fa-address-card"></i></button>
-            </div>
-            `;
-
-                container.innerHTML += card;
-
-            })
-
-        })
-    container.appendChild(card);
+// ====close Modale de Formulaire====
+function closeModal() {
+    modalContainer.classList.remove('show')
 }
 
+// ====open Modale de Formulaire====
+function openModal() {
+    modalContainer.classList.add('show')
+}
+
+// ==== Reset les inputs aprés ajoute de profil ====
+function resetInputStyles() {
+    myInputs.forEach(input => {
+        input.style.border = "";
+    });
+    profilpic.src = "icon-7797704_640.png";
+}
+
+
+function modaleAfficheProfil() {
+    const btnAfficheProfil = document.getElementById("affiche-profil")
+    const containerDetailProfil = document.getElementById("container-detail-profil")
+    const btnCloseProfil = document.getElementById("close-profil")
+
+    btnAfficheProfil.addEventListener('click', () => {
+        containerDetailProfil.classList.add('show-profil')
+    })
+    btnCloseProfil.addEventListener('click', () => {
+        containerDetailProfil.classList.remove('show-profil')
+    })
+}
+
+
+
+// ===Fonction juste aprées initialisation de l'application====
 function initApp() {
-    validationForm();
     addImageProfil();
     formModale();
-    // fetchDataFromJsonFile();
-    // renderUnassignedList();
-    // saveWorkersData();
     louadDatavUnassignedWorkers();
+    modaleAfficheProfil();
 
     cancel.addEventListener('click', () => {
         urlInput.value = "";
@@ -192,23 +177,27 @@ function initApp() {
         })
     });
 
-    ajoute.addEventListener('click', function (event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
-        const newWorker = {
-            id: Date.now(),
-            name: inputName.value.trim(),
-            role: inputRole.value.trim(),
-            image: inputImage.value.trim(),
-        };
-        // console.log(newWorker);
 
-        workers.push(newWorker);
-        saveWorkersData();
-        renderUnassignedList();
+        if (validationForm()) {
+            const newWorker = {
+                id: Date.now(),
+                name: inputName.value.trim(),
+                role: inputRole.value.trim(),
+                image: inputImage.value.trim(),
+            };
+            // console.log(newWorker);
+            workers.push(newWorker);
+            saveWorkersData();
+            renderUnassignedList();
 
-        form.reset();
-        // form.style.display="hidden"
-    });
+            form.reset();
+
+            closeModal();
+            resetInputStyles();
+        }
+    })
 
 }
 
@@ -224,3 +213,65 @@ initApp();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function fetchDataFromJsonFile() {
+    fetch('./profil.json')
+        .then(Response => Response.json())
+        .then(data => {
+            const container = document.querySelector(".side-card");
+            data.forEach(worker => {
+                const card = `
+            <div class="user-card" data-id="${worker.id}">
+            <img src="${worker.image}" alt="">
+            <div>
+                <h4>${worker.name}</h4>
+                <p>${worker.role}</p>
+            </div>
+            </div>
+            `;
+
+                container.innerHTML += card;
+
+            })
+
+        })
+    container.appendChild(card);
+}
