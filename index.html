@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="form.css">
     <link rel="stylesheet" href="détailProfeil.css">
     <script src="https://kit.fontawesome.com/a680a19743.js" crossorigin="anonymous"></script>
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -23,15 +26,15 @@
 
         </div>
 
-        <div class="section-zone">
+        <div class="section-zone" id="zone-container">
             <div class="section">
                 <div class="section-title">
                     <span><i class="fa-solid fa-people-group"></i> Salle de conférence</span>
                     <span class="capacity">0/10</span>
-                    <button class="btn-plus"><i class="fa-solid fa-user-plus"></i></button>
+                    <button class="btn-plus" id="btnAdd"><i class="fa-solid fa-user-plus"></i></button>
                 </div>
                 <div class="user-card small">
-                    <img src="user1.webp" alt="">
+                    <img src="user1.jpg" alt="">
                     <div>
                         <h4>Mouna Saiss</h4>
                         <p>Receptionist</p>
@@ -45,28 +48,12 @@
                     <span class="capacity">0/4</span>
                     <button class="btn-plus"><i class="fa-solid fa-user-plus"></i></button>
                 </div>
-                <div class="user-card small">
-                    <img src="user1.webp" alt="">
-                    <div>
-                        <h4>Mouna Saiss</h4>
-                        <p>Receptionist</p>
-                    </div>
-                    <button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>
-                </div>
             </div>
             <div class="section">
                 <div class="section-title">
                     <span><i class="fa-solid fa-person"></i> Salle du personnel</span>
                     <span class="capacity">0/10</span>
                     <button class="btn-plus"><i class="fa-solid fa-user-plus"></i></button>
-                </div>
-                <div class="user-card small">
-                    <img src="user1.webp" alt="">
-                    <div>
-                        <h4>Mouna Saiss</h4>
-                        <p>Receptionist</p>
-                    </div>
-                    <button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>
                 </div>
             </div>
             <div class="section">
@@ -75,14 +62,6 @@
                     <span class="capacity">0/2</span>
                     <button class="btn-plus"><i class="fa-solid fa-user-plus"></i></button>
                 </div>
-                <div class="user-card small">
-                    <img src="user1.webp" alt="">
-                    <div>
-                        <h4>Mouna Saiss</h4>
-                        <p>Receptionist</p>
-                    </div>
-                    <button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>
-                </div>
             </div>
             <div class="section">
                 <div class="section-title">
@@ -90,30 +69,12 @@
                     <span class="capacity">0/5</span>
                     <button class="btn-plus"><i class="fa-solid fa-user-plus"></i></button>
                 </div>
-                <div class="user-card small">
-                    <img src="user1.webp" alt="">
-                    <div>
-                        <h4>Mouna Saiss</h4>
-                        <p>Receptionist</p>
-                    </div>
-                    <button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>
-                </div>
             </div>
             <div class="section">
                 <div class="section-title">
                     <span><i class="fa-solid fa-server"></i> Salle des serveurs</span>
                     <span class="capacity">0/3</span>
                     <button class="btn-plus"><i class="fa-solid fa-user-plus"></i></button>
-                </div>
-                <div class="user-card small">
-                    <img src="user1.webp" alt="">
-                    <div>
-                        <h4>Mouna Saiss</h4>
-                        <p>Receptionist</p>
-                    </div>
-                    <button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>
-                    <button class="btn-affiche-profil" id="affiche-profil"><i
-                            class="fa-solid fa-address-card"></i></button>
                 </div>
             </div>
         </div>
@@ -123,7 +84,7 @@
         <div class="container-form" id="modal">
             <h2 style="color: blue;">Add New Worker</h2>
             <form id="signupForm" novalidate>
-                 <input type="hidden" id="workerId">
+                <input type="hidden" id="workerId">
                 <div class="form-input">
                     <label for="name">Nom complet</label>
                     <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
@@ -138,7 +99,7 @@
                         <option value="receptionniste">Réceptionniste</option>
                         <option value="technicien">Technicien IT</option>
                         <option value="securite">Agent de sécurité</option>
-                        <option value="securite">Autre </option>
+                        <option value="Autres">Autre </option>
                         <span class="role"></span>
                     </select>
                 </div>
@@ -191,16 +152,11 @@
                         class="my-input">
                     <span class="email"></span>
                 </div>
-
-
                 <div class="form-input">
                     <label for="phone">Téléphone</label>
                     <input type="tel" id="phone" name="phone" placeholder="+212 " required class="my-input">
                     <span class="phone"></span>
                 </div>
-
-
-
                 <button type="submit" id="ajoute">Ajouter</button>
                 <button type="reset" style="margin-top:10px; background-color: orangered;" id="close">Cancel</button>
 
@@ -211,11 +167,22 @@
         </div>
     </section>
 
-    <section id="container-detail-profil" class="container-detail-profil">
-        
+    <section id="container-detail-profil" class="container-detail-profil"></section>
+
+    <!-- modale filter -->
+    <section id="filtre-container">
+        <div class="section-filter">
+            <button id="closeModal" class="close-btn">×</button>
+            <div class="section-title-filter">
+                <span>personnes non asigné </span>
+            </div>
+            <div id="container-members-accept-in-zone">
+
+            </div>
+        </div>
     </section>
-    
-    <script src="file.js"></script>
+
+    <script src="file.js" type="module"></script>
 </body>
 
 </html>

@@ -1,3 +1,6 @@
+import defaultZones from "./zones.js"
+
+let zones = [];
 let workers = [];
 let tempExperience = [];
 let form = document.getElementById("signupForm");
@@ -31,7 +34,8 @@ const entrepriseStart = document.getElementById('start-expérience');
 const entrepriseEnd = document.getElementById('end-expérience');
 const btnSaveEntreprise = document.getElementById('save-expérience');
 
-
+// modale members
+const modalMembers = document.getElementById("filtre-container");
 
 // console.log(email)
 
@@ -41,17 +45,26 @@ function renderUnassignedList() {
     const cardsContainer = document.getElementById("cards-container");
     cardsContainer.innerHTML = "";
     workers.forEach((worker) => {
-        cardsContainer.append(creatCardHtmlUnassignedWorkers(worker));
+        if(!zones.some((z) => z.members.includes(worker.id))) {
+            cardsContainer.append(creatCardHtmlUnassignedWorkers(worker));
+        }
     })
 }
 
 const saveWorkersData = () => {
-    localStorage.setItem("workers", JSON.stringify(workers))
+    localStorage.setItem("workers", JSON.stringify(workers));
+    localStorage.setItem("zones", JSON.stringify(zones));
 }
 
 const louadDatavUnassignedWorkers = async () => {
-    const savedData = localStorage.getItem("workers")
-    // console.log(savedData)
+    const savedData = localStorage.getItem("workers");
+    const savedDateZones = localStorage.getItem("zones");
+
+    if(savedDateZones) {
+        zones = JSON.parse(savedDateZones);
+    } else {
+        zones = defaultZones;
+    }
 
     if (savedData) {
         workers = JSON.parse(savedData)
@@ -59,10 +72,7 @@ const louadDatavUnassignedWorkers = async () => {
     } else {
         const response = await fetch("./profil.json");
         workers = await response.json();
-        // console.log(workers)
-        saveWorkersData();
     }
-    renderUnassignedList();
 }
 
 function creatCardHtmlUnassignedWorkers(worker) {
@@ -245,7 +255,6 @@ function creatCardAfficheProfil(worker) {
 
 // =====function Gérer les experince =====
 
-
 function renderExperience() {
     const containerExpérience = document.getElementById('containerExpérience');
     containerExpérience.innerHTML = '';
@@ -336,7 +345,7 @@ function fillExperience(ex) {
     entrepriseStart.value = ex.start;
     entrepriseEnd.value = ex.end;
 }
-
+// fonction remplir l form avec les infos déja enregistrer 
 function fillform(worker) {
     inputWorkerId.value = worker.id;
     inputName.value = worker.name;
@@ -357,15 +366,133 @@ function clearExperience() {
     entrepriseEnd.value = '';
 }
 
+function addWorkerInZone() {
+    // console.log(btnAddInZone)
+    const div = document.createElement('div');
+    div.className = "user-card small";
+    div.setAttribute('data-id', worker.id);
+    div.innerHTML = `
+            <img src="user1.webp" alt="">
+            <div>
+            <h4>Mouna Saiss</h4>
+            <p>Receptionist</p>
+            </div>
+            <button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>
+    `;
 
+    const btnAddInZone = document.querySelector('.btn-plus');
+    btnAddInZone.addEventListener('click', () => {
+        const CardFilterProfil = document.getElementById("container-filter-list");
+        CardFilterProfil.innerHTML = "";
+        CardFilterProfil.append(creatCardAfficheProfil(worker));
+        CardFilterProfil.classList.add('show-profil');
+    });
+
+    return div;
+}
+
+function creatCardHtmlMember(zone,worker, isMember = false) {
+    const div = document.createElement('div');
+    div.className = "user-card small";
+    div.innerHTML = `
+            <img src="${worker.image}" alt="">
+            <div>
+                <h4>${worker.name}</h4>
+                <p>${worker.role}</p>
+            </div>
+            ${
+                isMember ?
+                 '<button class="btn-remove"><i class="fa-solid fa-user-minus"></i></button>':
+                 '<button class="btn-pluse"><i class="fa-solid fa-user-plus"></i></button>'
+            }
+            
+    `;
+
+    const pluseMember = div.querySelector('.btn-pluse');
+    if(pluseMember) {
+            pluseMember.addEventListener('click', () => {
+            zone.members.push(worker.id);
+            renderZones();
+            renderMembersAceptedInZone(zone);
+            renderUnassignedList();
+            saveWorkersData();
+        });
+    }
+    
+    const removeMember = div.querySelector('.btn-remove');
+    if(removeMember) {
+            removeMember.addEventListener('click', () => {
+            zone.members.splice(zone.members.indexOf(worker.id),1);
+            renderZones();
+            renderMembersAceptedInZone(zone);
+            renderUnassignedList();
+            saveWorkersData();
+        });
+    }
+    
+    return div;
+}
+
+function createCardZones(zone) {
+    const div = document.createElement('div');
+    div.className = "section";
+    div.innerHTML = `
+        <div class="section-title">
+            <span><i class="fa-solid ${zone.icon}"></i> ${zone.name}</span>
+            <span class="capacity">${zone.members.length}/${zone.capacity}</span>
+            <button class="btn-plus btn-add-member" ${zone.members.length == zone.capacity ? 'disabled' : ''}><i class="fa-solid fa-user-plus"></i></button>
+        </div>
+        <div class="members-containers">
+            
+        </div>
+    `;
+
+    // TODO : display members list
+    
+    const btnAddMembers = div.querySelector('.btn-add-member');
+    btnAddMembers.addEventListener('click', () => {
+         modalMembers.classList.add("show");
+        renderMembersAceptedInZone(zone);
+    });
+
+    const membersContainers = div.querySelector(".members-containers");
+    membersContainers.innerHTML = '';
+    workers.filter((w) => zone.members.includes(w.id))
+    .forEach((worker) => {
+        membersContainers.appendChild(creatCardHtmlMember(zone, worker, true));
+    });
+
+    return div;
+}
+
+function renderMembersAceptedInZone(zone) {
+    const containerMembersAcceptInZone = document.getElementById('container-members-accept-in-zone');
+    containerMembersAcceptInZone.innerHTML = '';
+
+    workers.filter((w) => zone.allowedRoles.includes(w.role) && !zones.some((z) => z.members.includes(w.id)))
+    .forEach((worker) => {
+        containerMembersAcceptInZone.append(creatCardHtmlMember(zone ,worker));
+    })
+}
+
+
+function renderZones() {
+    const continaire_zones = document.getElementById("zone-container");
+    continaire_zones.innerHTML = '';
+    zones.forEach((zone) => {
+        continaire_zones.appendChild(createCardZones(zone));
+    })
+}
 
 
 
 // ===Fonction juste aprées initialisation de l'application====
 function initApp() {
+    louadDatavUnassignedWorkers();
+    renderUnassignedList();
+    renderZones();
     addImageProfil();
     formModale();
-    louadDatavUnassignedWorkers();
     saveWorkersData();
 
 
@@ -377,7 +504,7 @@ function initApp() {
         })
         tempExperience = [];
         renderExperience();
-    });
+    })
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -434,6 +561,12 @@ function initApp() {
             renderExperience();
         }
     })
+
+    // btn of close modale members
+    const btnCloseModal = document.getElementById("closeModal");
+    btnCloseModal.addEventListener('click', () => {
+        modalMembers.classList.remove("show");
+    })
 }
 
 
@@ -441,72 +574,3 @@ function initApp() {
 
 initApp();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function fetchDataFromJsonFile() {
-    fetch('./profil.json')
-        .then(Response => Response.json())
-        .then(data => {
-            const container = document.querySelector(".side-card");
-            data.forEach(worker => {
-                const card = `
-            <div class="user-card" data-id="${worker.id}">
-            <img src="${worker.image}" alt="">
-            <div>
-                <h4>${worker.name}</h4>
-                <p>${worker.role}</p>
-            </div>
-            </div>
-            `;
-
-                container.innerHTML += card;
-
-            })
-
-        })
-    container.appendChild(card);
-}

@@ -96,6 +96,17 @@ body {
     cursor: pointer;
 }
 
+.btn-pluse {
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #e7ffee;
+    color: #3bcd3e;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .section-zone {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -133,6 +144,72 @@ body {
     width: 40px;
     height: 40px;
 }
+
+
+
+
+
+
+/* modale filter */
+#filtre-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+}
+#filtre-container.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+/* ======= MODAL CARD ======= */
+.section-filter {
+    background: white;
+    width: 380px;
+    padding: 25px 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    animation: slideDown 0.35s ease;
+}
+.section-title-filter {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.section-title-filter span {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    left: 150px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    transition: 0.2s;
+}
+.section-filter {
+    position: relative;
+}
+
+
+
+
+
+
 
 
 
